@@ -16,6 +16,9 @@ Usage of gitlab-pipe-cleaner:
         Config file (default "~/.config/gitlab-pipe-cleaner.json")
   -delete
         Delete files (default dry run / report only)
+  -update
+        Update to latest version
+  -v    Show version
 ```
 
 Running gitlab-pipe-cleaner without the `-delete` option will not delete any data, but rather do a dry-run.
