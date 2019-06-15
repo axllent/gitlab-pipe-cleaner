@@ -6,6 +6,7 @@ build = echo "\n\nBuilding $(1)-$(2)" && GOOS=$(1) GOARCH=$(2) go build ${LDFLAG
 	&& bzip2 dist/gitlab-pipe-cleaner_${VERSION}_$(1)_$(2)
 
 gitlab-pipe-cleaner: *.go
+	go get github.com/axllent/gitrel
 	go build ${LDFLAGS} -o gitlab-pipe-cleaner
 
 clean:
@@ -22,5 +23,3 @@ release:
 	$(call build,darwin,386)
 	$(call build,windows,386)
 	$(call build,windows,amd64)
-
-
