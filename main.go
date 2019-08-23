@@ -160,8 +160,12 @@ func APIRequest(method, url string) ([]byte, error) {
 	req.Header.Set("PRIVATE-TOKEN", config.APIKey)
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	body, err := ioutil.ReadAll(resp.Body)
 
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
