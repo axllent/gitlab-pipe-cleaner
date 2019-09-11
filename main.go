@@ -101,9 +101,8 @@ func main() {
 					// https://docs.gitlab.com/ee/api/jobs.html#erase-a-job
 					eraseURL := fmt.Sprintf("%s/projects/%d/jobs/%d/erase", config.GitlabURL, project.ID, job.ID)
 					_, err = APIRequest("POST", eraseURL)
-					if err != nil {
-						fmt.Printf("- Error deleting job #%d - %s\n", job.ID, err)
-					} else {
+					if err == nil {
+						// ignore errors as artifacts may have been auto-deleted based on timer
 						fmt.Printf("- Deleted %d artifact(s) - %dKb\n", len(job.Artifacts), bToKb(jobSize))
 						totalDeletedSize = totalDeletedSize + jobSize
 						totalDeletedJobs++
@@ -160,10 +159,14 @@ func APIRequest(method, url string) ([]byte, error) {
 	req.Header.Set("PRIVATE-TOKEN", config.APIKey)
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
 		return nil, err
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return body, err
 	}
 
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {

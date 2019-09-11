@@ -65,6 +65,11 @@ func init() {
 
 	err = json.Unmarshal(configJSON, &config)
 
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
+
 	if config.GitlabURL == "" || config.APIKey == "" {
 		fmt.Println("Error: no GitlabURL or APIKey found in your config")
 		os.Exit(1)
